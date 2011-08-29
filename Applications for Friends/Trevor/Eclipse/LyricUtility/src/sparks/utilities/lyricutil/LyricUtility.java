@@ -11,7 +11,7 @@ import java.net.*;
 
 @SuppressWarnings({ "serial", "rawtypes" })
 public class LyricUtility extends ArrayList{
-	
+
 	// vars
 	private File workingdir;
 	private int numberfiles;
@@ -280,11 +280,25 @@ public class LyricUtility extends ArrayList{
 			Pattern album = Pattern.compile("<b>Album.*b>(.*)</b>");
 			Pattern song = Pattern.compile("<b>Song.*b>(.*)</b>");
 			Pattern lyrics = Pattern.compile("<pre>([\\S\\W.]*)<img");
-			Matcher match = lyrics.matcher(c);
+			Matcher artistmatch = artist.matcher(c);
+			Matcher albummatch = album.matcher(c);
+			Matcher songmatch = song.matcher(c);
+			Matcher lyricsmatch = lyrics.matcher(c);
 			
-			if(match.find()){
-				String lyrics_return = match.group();
-				returndata = lyrics_return;
+			if(artistmatch.find() && albummatch.find() && songmatch.find() && lyricsmatch.find()){
+				String artist_return = artistmatch.group();
+				String album_return = albummatch.group();
+				String song_return = songmatch.group();
+				String lyrics_return = lyricsmatch.group();
+				
+				//String sql_template = "INSERT INTO \'TABLE\' (COLUMN1, COLUMN2) VALUES data1, data2;";
+				String sql_table = "";
+				String sql_return = "INSERT INTO " + sql_table + " VALUES \"" + artist_return +"\",\"" + album_return +"\",\"" + song_return +"\",\"" + lyrics_return +"\";";
+				
+				returndata = sql_return;
+				message("Junk Removed from file: " + f.getAbsolutePath());
+			} else {
+				message("File incompatible.");
 			}
 			
 			/*
@@ -299,7 +313,6 @@ public class LyricUtility extends ArrayList{
 				returndata += (" "+c.substring(39, c.lastIndexOf("<br />")));
 			}
 				*/
-			message("Junk Removed from file: " + f.getAbsolutePath());
 		} catch (Exception e){
 			error("Unable to remove junk from file ("+e.getMessage()+"): " + f.getAbsolutePath());
 		}
@@ -368,6 +381,9 @@ public class LyricUtility extends ArrayList{
 		} catch (Exception e){
 			error("Logs could not be closed: "+ e.getMessage());
 		}
+	}
+	public void setRegex(String regex){
+		// REGEX SWITCH HERE
 	}
 }
 
