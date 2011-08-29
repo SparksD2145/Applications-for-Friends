@@ -136,6 +136,7 @@ public class LyricUtility extends ArrayList{
 			error("Location invalid: Parent not a directory.");
 		}
 	}
+	@SuppressWarnings("unused")
 	private void searchTree(File current){
 		if(current.isDirectory() && (current.getName().lastIndexOf("SchoolUtil") < 0)){
 			if(checkPermissions(current)){
@@ -151,12 +152,11 @@ public class LyricUtility extends ArrayList{
 				}
 			}
 		} else if(current.isFile()) {
-				File fixed = checkDescriptor(current);
-				if(fixed != null){
+				if(current != null){
 					numberfiles++;
 					tree.ensureCapacity(numberfiles);
-					tree.add(fixed);
-					if(!suppressFirstPass){message("File added: "+ fixed.toString()); }
+					tree.add(current);
+					if(!suppressFirstPass){message("File added: "+ current.toString()); }
 				} else {
 					if(!suppressFirstPass){message("File ignored: " + current.getAbsolutePath());}
 				}
@@ -318,40 +318,6 @@ public class LyricUtility extends ArrayList{
 		}
 		return returndata;
 	}
-	
-	public File checkDescriptor(File f){
-		if(!f.isDirectory()){
-			try {
-				FileReader input = new FileReader(f);
-				BufferedReader r = new BufferedReader(input);
-				String doctype = r.readLine();
-				r.close();
-				
-				if(doctype.substring(0,9).equalsIgnoreCase("<!DOCTYPE") && !(f.getName().lastIndexOf(".") >= 0)){
-					if(f.renameTo(new File(f.getAbsoluteFile() + ".html"))){
-						message("File extension reset successful: " + f.getAbsoluteFile());
-						return f;
-					} else {
-						error("File extension reset failed: " + f.getAbsoluteFile());
-						return null;
-					}
-				} else if(doctype.substring(0,9).equalsIgnoreCase("<!DOCTYPE") && (f.getName().lastIndexOf(".htm") >= 0)){
-					message("File compatible: " + f.getAbsoluteFile());
-					return f;
-				} else {
-					return null;
-				}
-				  
-			}catch (ArrayIndexOutOfBoundsException e){
-					return null;
-			}catch (Exception e){
-				return null;
-			}
-		} else {
-			return null;
-		}
-	}
-	
 	
 	private boolean checkPermissions(File dir){
 		if(dir.canRead() && dir.canWrite()){ 
