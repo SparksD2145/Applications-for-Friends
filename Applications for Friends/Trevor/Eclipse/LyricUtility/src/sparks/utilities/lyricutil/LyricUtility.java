@@ -19,14 +19,12 @@ public class LyricUtility extends ArrayList{
 	private ArrayList<File> tree;
 	private ArrayList<File> tree_fixed;
 	
-	private String dirpaths[] = {"_LyricUtility", "_LyricUtility/filetree", 
-								"" /*_LyricUtility/sql_files"*/ ,"_LyricUtility/filetree/tree.dat", 
-								"" /*_LyricUtility/sql_files/result.sql*/ ,"_LyricUtility/dupli", 
-								"_LyricUtility/filetree/fixed_tree.dat","_LyricUtility/log",
-								"_LyricUtility/log/log_complete.dat","_LyricUtility/log/log_successful.dat",
-								"_LyricUtility/log/log_error.dat"};
+	private String dirpaths[] = {"_LyricUtility", "_LyricUtility/filetree","_LyricUtility/filetree/tree.dat"
+			,"_LyricUtility/dupli", 
+			"_LyricUtility/filetree/fixed_tree.dat","_LyricUtility/log",
+			"_LyricUtility/log/log_complete.dat","_LyricUtility/log/log_successful.dat",
+			"_LyricUtility/log/log_error.dat"};
 	private int treei = 3;
-	//private int sqli = 4;
 	private int cpydtree = 5;
 	private int ftreei = 6;
 	
@@ -186,7 +184,7 @@ public class LyricUtility extends ArrayList{
 			BufferedReader r = new BufferedReader(input);
 			
 			FileWriter w = new FileWriter(dirs[ftreei]);
-			FileWriter finalw = new FileWriter(new File(this.getWorkingDir()+File.separator+"biglistofstuff.txt"));
+			FileWriter finalw = new FileWriter(new File(this.getWorkingDir()+File.separator+"biglistofstuff.sql"));
 			
 			String buffer = r.readLine();
 			
@@ -298,7 +296,7 @@ public class LyricUtility extends ArrayList{
 				returndata = sql_return;
 				message("Junk Removed from file: " + f.getAbsolutePath());
 			} else {
-				message("File incompatible.");
+				error("File incompatible: "+ f.getName());
 			}
 			
 			/*
